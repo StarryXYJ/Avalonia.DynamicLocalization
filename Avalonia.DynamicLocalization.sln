@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.DynamicLocalization.Demo", "Avalonia.DynamicLocalization.Demo\Avalonia.DynamicLocalization.Demo.csproj", "{7E253D0B-B339-42D3-B4F9-E59D4511B4AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicLocalization.Avalonia.Demo", "DynamicLocalization.Avalonia.Demo\DynamicLocalization.Avalonia.Demo.csproj", "{7E253D0B-B339-42D3-B4F9-E59D4511B4AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.DynamicLocalization", "Avalonia.DynamicLocalization\Avalonia.DynamicLocalization.csproj", "{2809A296-AAA4-4167-951A-4CA0AD1DB562}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicLocalization.Avalonia", "DynamicLocalization.Avalonia\DynamicLocalization.Avalonia.csproj", "{2809A296-AAA4-4167-951A-4CA0AD1DB562}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Avalonia.DynamicLocalization.Demo.Resx", "Avalonia.DynamicLocalization.Demo.Resx\Avalonia.DynamicLocalization.Demo.Resx.csproj", "{A1396D45-0995-4F8C-9D9F-26F49F1EB046}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicLocalization.Avalonia.Demo.Resx", "DynamicLocalization.Avalonia.Demo.Resx\DynamicLocalization.Avalonia.Demo.Resx.csproj", "{A1396D45-0995-4F8C-9D9F-26F49F1EB046}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
