@@ -1,0 +1,139 @@
+<Window x:Class="DynamicLocalization.Demo.Wpf.Resx.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DynamicLocalization.Demo.Wpf.Resx.ViewModels"
+        xmlns:loc="clr-namespace:DynamicLocalization.WPF.MarkupExtensions;assembly=DynamicLocalization.WPF"
+        mc:Ignorable="d"
+        Title="{loc:Localize App.Title}"
+        Height="600" Width="900"
+        d:DataContext="{d:DesignInstance vm:MainWindowViewModel}">
+    <ScrollViewer>
+        <StackPanel Margin="40">
+            <TextBlock Style="{StaticResource H1Style}" Text="{Binding Greeting}"/>
+            <TextBlock Style="{StaticResource BodyStyle}" Text="{Binding WelcomeMessage}"/>
+            <TextBlock Style="{StaticResource BodyStyle}" Text="{loc:Localize SwitchLanguage}"/>
+            
+            <ComboBox ItemsSource="{Binding AvailableLanguages}"
+                      SelectedItem="{Binding SelectedLanguage}"
+                      Width="200"
+                      HorizontalAlignment="Left"
+                      Margin="0,8,0,16">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding NativeName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Border BorderBrush="Green" BorderThickness="2" Padding="16" Margin="0,0,0,16" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="{loc:Localize Features.Title}" FontWeight="Bold"/>
+                    <TextBlock Text="{loc:Localize Features.Resx}"/>
+                    <TextBlock Text="{loc:Localize Features.HotReload}"/>
+                    <TextBlock Text="{loc:Localize Features.Pluggable}"/>
+                </StackPanel>
+            </Border>
+
+            <Border BorderBrush="Orange" BorderThickness="2" Padding="16" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="{loc:Localize Fallback.Title}" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Style="{StaticResource BodyStyle}" Text="{loc:Localize Fallback.Description}"/>
+                    
+                    <Separator Margin="0,8"/>
+                    
+                    <TextBlock Style="{StaticResource H2Style}" Text="Current Culture Info:"/>
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Current Culture: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CurrentCultureName}" Style="{StaticResource MonoStyle}"/>
+                        
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Parent Culture: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ParentCultureName}" Style="{StaticResource MonoStyle}"/>
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Available Cultures: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding AvailableCulturesList}" Style="{StaticResource MonoStyle}" TextWrapping="Wrap"/>
+                    </Grid>
+
+                    <Separator Margin="0,8"/>
+                    
+                    <TextBlock Style="{StaticResource H2Style}" Text="Fallback Behavior Demo:"/>
+                    <TextBlock Style="{StaticResource BodyStyle}" Text="Keys with fallback (common key exists in all cultures):" Margin="0,4,0,0"/>
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Fallback.CommonKey: " FontWeight="Bold"/>
+                        <TextBlock Grid.Column="1" Text="{loc:Localize Fallback.CommonKey}" Style="{StaticResource MonoStyle}"/>
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource BodyStyle}" Text="Keys that only exist in specific cultures:" Margin="0,8,0,0"/>
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Fallback.EnglishOnly: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{loc:Localize Fallback.EnglishOnly}" Style="{StaticResource MonoStyle}"/>
+                        
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Fallback.USOnly: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{loc:Localize Fallback.USOnly}" Style="{StaticResource MonoStyle}"/>
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Fallback.UKOnly: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{loc:Localize Fallback.UKOnly}" Style="{StaticResource MonoStyle}"/>
+                        
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Fallback.ChineseOnly: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{loc:Localize Fallback.ChineseOnly}" Style="{StaticResource MonoStyle}"/>
+                        
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Fallback.JapaneseOnly: " FontWeight="Bold"/>
+                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{loc:Localize Fallback.JapaneseOnly}" Style="{StaticResource MonoStyle}"/>
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource BodyStyle}" Text="Keys that don't exist anywhere (returns key name):" Margin="0,8,0,0"/>
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="NonExistent.Key: " FontWeight="Bold"/>
+                        <TextBlock Grid.Column="1" Text="{loc:Localize NonExistent.Key}" Style="{StaticResource MonoStyle}" Foreground="Red"/>
+                    </Grid>
+
+                    <Separator Margin="0,8"/>
+                    
+                    <TextBlock Style="{StaticResource H2Style}" Text="Color Names (demonstrates partial localization):"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <Border Background="#FF6B6B" Padding="12,6" CornerRadius="4" Margin="0,0,16,0">
+                            <TextBlock Text="{loc:Localize Color.Red}" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border Background="#4ECDC4" Padding="12,6" CornerRadius="4" Margin="0,0,16,0">
+                            <TextBlock Text="{loc:Localize Color.Blue}" Foreground="White" FontWeight="Bold"/>
+                        </Border>
+                        <Border Background="#95E1A3" Padding="12,6" CornerRadius="4">
+                            <TextBlock Text="{loc:Localize Color.Green}" Foreground="Black" FontWeight="Bold"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

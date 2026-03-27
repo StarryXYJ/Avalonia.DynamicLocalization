@@ -1,0 +1,27 @@
+{
+  "App": {
+    "Title": "Avalonia Dynamische Lokalisierung Demo",
+    "Version": "1.0.0"
+  },
+  "Greeting": "Willkommen bei Avalonia Dynamische Lokalisierung!",
+  "WelcomeMessage": "Dies ist eine leichtgewichtige, erweiterbare und steckbare Internationalisierungsbibliothek für Avalonia.",
+  "SwitchLanguage": "Sprache wechseln:",
+  "Features": {
+    "Title": "Funktionen:",
+    "Json": "JSON-basierte Lokalisierungsdateien",
+    "HotReload": "Hot-Reload-Unterstützung",
+    "Pluggable": "Steckbare Anbieter-Architektur",
+    "Nested": "Unterstützung für verschachteltes JSON-Format"
+  },
+  "Fallback": {
+    "Title": "Kultur-Fallback-Demo:",
+    "Description": "Dieser Abschnitt demonstriert das Kultur-Fallback-Verhalten.",
+    "CommonKey": "Dies ist ein gemeinsamer Schlüssel (aus de.json)",
+    "GermanOnly": "Dieser Schlüssel existiert nur auf Deutsch (de)"
+  },
+  "Color": {
+    "Red": "Rot",
+    "Blue": "Blau",
+    "Green": "Grün"
+  }
+}

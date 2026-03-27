@@ -1,29 +1,29 @@
 # DynamicLocalization
 
-[中文文档](README.zh-CN.md)
+[English](README.md)
 
-A lightweight, extensible, and pluggable internationalization library with hot-reload support and multiple data sources for Avalonia and WPF.
+一个轻量级、可扩展、可插拔的国际化库，支持热重载和多种数据源，适用于 Avalonia 和 WPF。
 
-## Features
+## 特性
 
-- 🌍 **Multi-language Support** - Support for any number of languages
-- 🔄 **Hot Reload** - Dynamically switch languages at runtime without restart
-- 🔌 **Pluggable Architecture** - Support for custom data source providers
-- 📦 **JSON Support** - Built-in JSON localization file support (flat and nested formats)
-- 📄 **RESX Support** - Built-in RESX resource file support
-- 🎯 **XAML Friendly** - Provides clean XAML markup extensions
-- 💉 **DI Integration** - Full dependency injection support
-- 🖥️ **Multi-Platform** - Support for Avalonia and WPF
+- 🌍 **多语言支持** - 支持任意数量的语言
+- 🔄 **热重载** - 运行时动态切换语言，无需重启
+- 🔌 **可插拔架构** - 支持自定义数据源提供者
+- 📦 **JSON 支持** - 内置 JSON 本地化文件支持（扁平格式和嵌套格式）
+- 📄 **RESX 支持** - 内置 RESX 资源文件支持
+- 🎯 **XAML 友好** - 提供简洁的 XAML 标记扩展
+- 💉 **DI 集成** - 完整的依赖注入支持
+- 🖥️ **多平台** - 支持 Avalonia 和 WPF
 
-## Packages
+## 包
 
-| Package | Description | Platform |
+| 包 | 描述 | 平台 |
 |---------|-------------|----------|
-| [DynamicLocalization.Core](src/DynamicLocalization.Core) | Core library with platform-independent logic | .NET 6+ |
-| [DynamicLocalization.Avalonia](src/DynamicLocalization.Avalonia) | Avalonia platform implementation | Avalonia 11+ |
-| [DynamicLocalization.WPF](src/DynamicLocalization.WPF) | WPF platform implementation | WPF (.NET 6+) |
+| [DynamicLocalization.Core](src/DynamicLocalization.Core) | 核心库，包含平台无关逻辑 | .NET 6+ |
+| [DynamicLocalization.Avalonia](src/DynamicLocalization.Avalonia) | Avalonia 平台实现 | Avalonia 11+ |
+| [DynamicLocalization.WPF](src/DynamicLocalization.WPF) | WPF 平台实现 | WPF (.NET 6+) |
 
-## Installation
+## 安装
 
 ### Avalonia
 
@@ -37,15 +37,15 @@ A lightweight, extensible, and pluggable internationalization library with hot-r
 <PackageReference Include="DynamicLocalization.WPF" />
 ```
 
-## Quick Start
+## 快速开始
 
-### 1. Create Localization Files
+### 1. 创建本地化文件
 
-#### Option A: JSON Files
+#### 方式 A: JSON 文件
 
-Create a `Localization` folder in your project and add JSON files.
+在项目中创建 `Localization` 文件夹并添加 JSON 文件。
 
-**Flat Format (Traditional):**
+**扁平格式（传统）：**
 
 **Localization/en.json**
 ```json
@@ -56,7 +56,7 @@ Create a `Localization` folder in your project and add JSON files.
 }
 ```
 
-**Nested Format (Recommended for better organization):**
+**嵌套格式（推荐，结构更清晰）：**
 
 **Localization/en.json**
 ```json
@@ -75,7 +75,7 @@ Create a `Localization` folder in your project and add JSON files.
 }
 ```
 
-Both formats produce the same keys: `App.Title`, `App.Version`, `Greeting`, `WelcomeMessage`, `Features.Title`, etc.
+两种格式生成的键相同：`App.Title`、`App.Version`、`Greeting`、`WelcomeMessage`、`Features.Title` 等。
 
 **Localization/zh-CN.json**
 ```json
@@ -94,11 +94,11 @@ Both formats produce the same keys: `App.Title`, `App.Version`, `Greeting`, `Wel
 }
 ```
 
-#### Option B: RESX Files
+#### 方式 B: RESX 文件
 
-Add RESX resource files to your project:
+在项目中添加 RESX 资源文件：
 
-**Resources/Strings.resx** (Default/English)
+**Resources/Strings.resx** (默认/英文)
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <root>
@@ -111,7 +111,7 @@ Add RESX resource files to your project:
 </root>
 ```
 
-**Resources/Strings.zh-CN.resx** (Chinese)
+**Resources/Strings.zh-CN.resx** (中文)
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <root>
@@ -124,7 +124,7 @@ Add RESX resource files to your project:
 </root>
 ```
 
-### 2. Configure Services
+### 2. 配置服务
 
 #### Avalonia (App.axaml.cs)
 
@@ -141,7 +141,7 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
         
-        // Option A: JSON files
+        // 方式 A: JSON 文件
         services.AddJsonLocalization(options =>
         {
             options.BasePath = "Localization";
@@ -149,7 +149,7 @@ public partial class App : Application
             options.Assembly = typeof(App).Assembly;
         });
 
-        // Option B: RESX files
+        // 方式 B: RESX 文件
         // services.AddResxLocalization(options =>
         // {
         //     options.ResourceType = typeof(Resources.Strings);
@@ -177,7 +177,7 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
         
-        // Option A: JSON files
+        // 方式 A: JSON 文件
         services.AddJsonLocalization(options =>
         {
             options.BasePath = "Localization";
@@ -185,7 +185,7 @@ public partial class App : Application
             options.Assembly = typeof(App).Assembly;
         });
 
-        // Option B: RESX files
+        // 方式 B: RESX 文件
         // services.AddResxLocalization(options =>
         // {
         //     options.ResourceType = typeof(Properties.Resources);
@@ -199,7 +199,7 @@ public partial class App : Application
 }
 ```
 
-### 3. Using in XAML
+### 3. 在 XAML 中使用
 
 #### Avalonia
 
@@ -233,7 +233,7 @@ public partial class App : Application
 </Window>
 ```
 
-### 4. Using in ViewModel
+### 4. 在 ViewModel 中使用
 
 ```csharp
 using DynamicLocalization.Core;
@@ -260,16 +260,16 @@ public class MainViewModel
 
     private void OnLanguageChanged(object? sender, LanguageChangedEventArgs e)
     {
-        // Update bound properties
+        // 更新绑定属性
     }
 }
 ```
 
-## JSON Format Details
+## JSON 格式详解
 
-The JSON provider supports two formats:
+JSON 提供者支持两种格式：
 
-### Flat Format
+### 扁平格式
 ```json
 {
   "App.Title": "My App",
@@ -278,7 +278,7 @@ The JSON provider supports two formats:
 }
 ```
 
-### Nested Format
+### 嵌套格式
 ```json
 {
   "App": {
@@ -291,29 +291,29 @@ The JSON provider supports two formats:
 }
 ```
 
-Both formats result in the same keys: `App.Title`, `App.Version`, `Features.HotReload`.
+两种格式生成的键相同：`App.Title`、`App.Version`、`Features.HotReload`。
 
-The nested format is recommended for better organization and readability, especially for large projects.
+推荐使用嵌套格式，结构更清晰，特别适合大型项目。
 
-## API Reference
+## API 参考
 
 ### ILanguageService
 
-Core language service interface:
+核心语言服务接口：
 
-| Property/Method | Description |
+| 属性/方法 | 描述 |
 |-----------------|-------------|
-| `CurrentLanguage` | Gets or sets the current language |
-| `AvailableLanguages` | Gets the list of all available languages |
-| `this[string key]` | Gets the localized string for the specified key |
-| `GetString(string key)` | Gets a localized string |
-| `GetString(string key, CultureInfo? culture)` | Gets a localized string for the specified culture |
-| `Format(string key, params object[] args)` | Formats a localized string |
-| `LanguageChanged` | Language changed event |
+| `CurrentLanguage` | 获取或设置当前语言 |
+| `AvailableLanguages` | 获取所有可用语言列表 |
+| `this[string key]` | 获取指定键的本地化字符串 |
+| `GetString(string key)` | 获取本地化字符串 |
+| `GetString(string key, CultureInfo? culture)` | 获取指定区域性的本地化字符串 |
+| `Format(string key, params object[] args)` | 格式化本地化字符串 |
+| `LanguageChanged` | 语言更改事件 |
 
 ### ILocalizationProvider
 
-Data source provider interface for custom implementations:
+数据源提供者接口，用于自定义实现：
 
 ```csharp
 public interface ILocalizationProvider
@@ -326,28 +326,28 @@ public interface ILocalizationProvider
 }
 ```
 
-## Provider Options
+## 提供者选项
 
 ### JsonLocalizationProvider
 
-| Option | Description | Default |
+| 选项 | 描述 | 默认值 |
 |--------|-------------|---------|
-| `BasePath` | Directory containing JSON files | `"Localization"` |
-| `FilePattern` | File matching pattern | `"*.json"` |
-| `UseEmbeddedResources` | Whether to load from embedded resources | `false` |
-| `Assembly` | Specified assembly (embedded resource mode) | Calling assembly |
+| `BasePath` | JSON 文件所在目录 | `"Localization"` |
+| `FilePattern` | 文件匹配模式 | `"*.json"` |
+| `UseEmbeddedResources` | 是否从嵌入资源加载 | `false` |
+| `Assembly` | 指定程序集（嵌入资源模式） | 调用程序集 |
 
 ### ResxLocalizationProvider
 
-| Option | Description | Default |
+| 选项 | 描述 | 默认值 |
 |--------|-------------|---------|
-| `ResourceType` | Type of the RESX resource file | Required |
-| `AutoDetectCultures` | Whether to auto-detect available cultures | `true` |
-| `KnownCultures` | Manually specify known culture list | `null` |
+| `ResourceType` | RESX 资源文件类型 | 必需 |
+| `AutoDetectCultures` | 是否自动检测可用区域性 | `true` |
+| `KnownCultures` | 手动指定已知区域性列表 | `null` |
 
-## Custom Provider
+## 自定义提供者
 
-Implement the `ILocalizationProvider` interface to create custom data sources:
+实现 `ILocalizationProvider` 接口来创建自定义数据源：
 
 ```csharp
 public class DatabaseLocalizationProvider : ILocalizationProvider
@@ -356,12 +356,12 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
 
     public IEnumerable<CultureInfo> GetAvailableCultures()
     {
-        // Get supported languages from database
+        // 从数据库获取支持的语言
     }
 
     public string? GetString(string key, CultureInfo culture)
     {
-        // Get localized string from database
+        // 从数据库获取本地化字符串
     }
 
     public bool TryGetString(string key, CultureInfo culture, out string? value)
@@ -372,12 +372,12 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
 
     public async Task ReloadAsync(CancellationToken cancellationToken = default)
     {
-        // Reload data
+        // 重新加载数据
     }
 }
 ```
 
-## Architecture
+## 架构
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -388,7 +388,7 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
 │  │                  DynamicLocalization.Core               │    │
 │  │  - ILanguageService, LanguageService                    │    │
 │  │  - ILocalizationProvider, Providers                     │    │
-│  │  - Platform-independent logic                           │    │
+│  │  - 平台无关逻辑                                          │    │
 │  └─────────────────────────────────────────────────────────┘    │
 │                              │                                  │
 │              ┌───────────────┴───────────────┐                  │
@@ -403,6 +403,6 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## License
+## 许可证
 
 MIT License

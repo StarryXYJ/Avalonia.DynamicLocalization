@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\DynamicLocalization.WPF\DynamicLocalization.WPF.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\Strings.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Strings.zh-CN.resx">
+            <DependentUpon>Strings.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Strings.zh-TW.resx">
+            <DependentUpon>Strings.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Strings.ja.resx">
+            <DependentUpon>Strings.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Strings.de.resx">
+            <DependentUpon>Strings.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Strings.en-US.resx">
+            <DependentUpon>Strings.resx</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resources\Strings.en-GB.resx">
+            <DependentUpon>Strings.resx</DependentUpon>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Resources\Strings.Designer.cs">
+            <DependentUpon>Strings.resx</DependentUpon>
+            <AutoGen>True</AutoGen>
+        </Compile>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net6.0-windows;net7.0-windows;net8.0-windows;net9.0-windows</TargetFrameworks>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <UseWPF>true</UseWPF>
+        <MinVerTagPrefix>v</MinVerTagPrefix>
+        <MinVerAutoIncrement>patch</MinVerAutoIncrement>
+
+        <!-- NuGet Packaging -->
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>DynamicLocalization.WPF</PackageId>
+        <Authors>Sakuya Starry</Authors>
+        <Description>A lightweight, extensible, and pluggable WPF internationalization library with hot-reload support and multiple data sources.</Description>
+        <PackageTags>i18n;Localization;WPF</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/StarryXYJ/Avalonia.DynamicLocalization</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/StarryXYJ/Avalonia.DynamicLocalization.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MinVer" Version="8.0.0-alpha.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\DynamicLocalization.Core\DynamicLocalization.Core.csproj"/>
+    </ItemGroup>
+
+</Project>

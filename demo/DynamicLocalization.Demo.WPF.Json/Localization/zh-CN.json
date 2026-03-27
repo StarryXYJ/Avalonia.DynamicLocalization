@@ -1,0 +1,26 @@
+{
+  "App": {
+    "Title": "WPF 动态本地化演示",
+    "Version": "1.0.0"
+  },
+  "Greeting": "欢迎使用 WPF 动态本地化！",
+  "WelcomeMessage": "这是一个轻量级、可扩展、可插拔的 WPF 国际化库。",
+  "SwitchLanguage": "切换语言：",
+  "Features": {
+    "Title": "特性：",
+    "Json": "基于 JSON 的本地化文件",
+    "HotReload": "热重载支持",
+    "Pluggable": "可插拔的提供程序系统",
+    "Nested": "支持嵌套 JSON 格式"
+  },
+  "Fallback": {
+    "Title": "文化回退演示：",
+    "Description": "此部分演示文化回退行为。",
+    "CommonKey": "这是一个通用键（来自 zh-CN.json）"
+  },
+  "Color": {
+    "Red": "红色",
+    "Blue": "蓝色",
+    "Green": "绿色"
+  }
+}

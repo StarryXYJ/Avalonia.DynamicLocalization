@@ -1,0 +1,27 @@
+{
+  "App": {
+    "Title": "Avalonia 動態本地化演示",
+    "Version": "1.0.0"
+  },
+  "Greeting": "歡迎使用 Avalonia 動態本地化！",
+  "WelcomeMessage": "這是一個輕量級、可擴展、可插拔的 Avalonia 國際化庫。",
+  "SwitchLanguage": "切換語言：",
+  "Features": {
+    "Title": "功能特性：",
+    "Json": "基於 JSON 的本地化文件",
+    "HotReload": "支持熱重載",
+    "Pluggable": "可插拔的提供者系統",
+    "Nested": "支持嵌套 JSON 格式"
+  },
+  "Fallback": {
+    "Title": "文化回退演示：",
+    "Description": "此部分演示文化回退行為。",
+    "CommonKey": "這是一個通用鍵（來自 zh-TW.json）",
+    "TWOnly": "此鍵僅存在於繁體中文（zh-TW）"
+  },
+  "Color": {
+    "Red": "紅色",
+    "Blue": "藍色",
+    "Green": "綠色"
+  }
+}

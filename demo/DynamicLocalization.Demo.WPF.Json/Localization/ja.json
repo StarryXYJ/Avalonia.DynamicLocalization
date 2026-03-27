@@ -1,0 +1,27 @@
+{
+  "App": {
+    "Title": "WPF ダイナミックローカリゼーションデモ",
+    "Version": "1.0.0"
+  },
+  "Greeting": "WPF ダイナミックローカリゼーションへようこそ！",
+  "WelcomeMessage": "これは軽量で拡張可能なWPF用の国際化ライブラリです。",
+  "SwitchLanguage": "言語を切り替え：",
+  "Features": {
+    "Title": "機能：",
+    "Json": "JSONベースのローカリゼーションファイル",
+    "HotReload": "ホットリロード対応",
+    "Pluggable": "プラグイン可能なプロバイダシステム",
+    "Nested": "ネストされたJSON形式のサポート"
+  },
+  "Fallback": {
+    "Title": "カルチャフォールバックデモ：",
+    "Description": "このセクションはカルチャフォールバックの動作を示します。",
+    "CommonKey": "これは共通キーです（ja.jsonから）",
+    "JapaneseOnly": "このキーは日本語（ja）にのみ存在します"
+  },
+  "Color": {
+    "Red": "赤",
+    "Blue": "青",
+    "Green": "緑"
+  }
+}

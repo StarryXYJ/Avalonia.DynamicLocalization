@@ -1,0 +1,27 @@
+{
+  "App": {
+    "Title": "WPF Dynamic Localization Demo",
+    "Version": "1.0.0"
+  },
+  "Greeting": "Welcome to WPF Dynamic Localization!",
+  "WelcomeMessage": "This is a lightweight, extensible, and pluggable internationalization library for WPF.",
+  "SwitchLanguage": "Switch Language:",
+  "Features": {
+    "Title": "Features:",
+    "Json": "JSON-based localization files",
+    "HotReload": "Hot reload support",
+    "Pluggable": "Pluggable provider system",
+    "Nested": "Nested JSON format support"
+  },
+  "Fallback": {
+    "Title": "Culture Fallback Demo:",
+    "Description": "This section demonstrates culture fallback behavior.",
+    "CommonKey": "This is a common key (from en.json)",
+    "EnglishOnly": "This key only exists in base English (en)"
+  },
+  "Color": {
+    "Red": "Red",
+    "Blue": "Blue",
+    "Green": "Green"
+  }
+}

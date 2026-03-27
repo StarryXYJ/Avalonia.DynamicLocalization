@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net9.0</TargetFramework>
@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DynamicLocalization.Avalonia\DynamicLocalization.Avalonia.csproj" />
+      <ProjectReference Include="..\..\src\DynamicLocalization.Avalonia\DynamicLocalization.Avalonia.csproj" />
     </ItemGroup>
 
     <!-- RESX localization files -->
