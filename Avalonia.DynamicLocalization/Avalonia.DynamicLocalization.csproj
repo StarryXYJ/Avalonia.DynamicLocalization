@@ -1,10 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
+        <TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+        <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Avalonia.DynamicLocalization</RootNamespace>
+        <LangVersion>latest</LangVersion>
         <MinVerTagPrefix>v</MinVerTagPrefix>
         <MinVerAutoIncrement>patch</MinVerAutoIncrement>
 
@@ -13,10 +14,10 @@
         <PackageId>Avalonia.DynamicLocalization</PackageId>
         <Authors>Sakuya Starry</Authors>
         <Description>A lightweight, extensible, and pluggable Avalonia internationalization library with hot-reload support and multiple data sources.</Description>
-        <PackageTags>settings;configuration;ui;avalonia;wpf;ursa</PackageTags>
+        <PackageTags>i18n;Localization;Avalonia</PackageTags>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-<!--        <PackageProjectUrl>https://github.com/StarryXYJ/AutoSettingUI</PackageProjectUrl>-->
-<!--        <RepositoryUrl>https://github.com/StarryXYJ/AutoSettingUI.git</RepositoryUrl>-->
+        <PackageProjectUrl>https://github.com/StarryXYJ/Avalonia.DynamicLocalization</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/StarryXYJ/Avalonia.DynamicLocalization.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
