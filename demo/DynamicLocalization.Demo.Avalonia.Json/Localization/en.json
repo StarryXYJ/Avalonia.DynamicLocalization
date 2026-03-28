@@ -32,5 +32,12 @@
     "PriceDisplay": "Product: {0}, Price: {1:C}",
     "DateDisplay": "Today is {0:D}",
     "NumberDisplay": "Value: {0:N2}"
+  },
+  "FontSize": {
+    "Title": "Font Size Demo:",
+    "Description": "Demonstrates culture-aware font sizing.",
+    "DefaultSize": "16",
+    "LargeSize": "24",
+    "SampleText": "This text size changes with culture!"
   }
 }

@@ -1,5 +1,9 @@
 # DynamicLocalization
 
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.Core.svg)](https://www.nuget.org/packages/DynamicLocalization.Core/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/DynamicLocalization.Core.svg)](https://www.nuget.org/packages/DynamicLocalization.Core/)
+
 [中文文档](README.zh-CN.md)
 
 A lightweight, extensible, and pluggable internationalization library with hot-reload support and multiple data sources for Avalonia and WPF.
@@ -19,9 +23,9 @@ A lightweight, extensible, and pluggable internationalization library with hot-r
 
 | Package | Description | Platform |
 |---------|-------------|----------|
-| [DynamicLocalization.Core](src/DynamicLocalization.Core) | Core library with platform-independent logic | .NET 6+ |
-| [DynamicLocalization.Avalonia](src/DynamicLocalization.Avalonia) | Avalonia platform implementation | Avalonia 11+ |
-| [DynamicLocalization.WPF](src/DynamicLocalization.WPF) | WPF platform implementation | WPF (.NET 6+) |
+| [![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.Core.svg)](https://www.nuget.org/packages/DynamicLocalization.Core/) [DynamicLocalization.Core](https://www.nuget.org/packages/DynamicLocalization.Core/) | Core library with platform-independent logic | .NET 6+ |
+| [![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.Avalonia.svg)](https://www.nuget.org/packages/DynamicLocalization.Avalonia/) [DynamicLocalization.Avalonia](https://www.nuget.org/packages/DynamicLocalization.Avalonia/) | Avalonia platform implementation | Avalonia 11+ |
+| [![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.WPF.svg)](https://www.nuget.org/packages/DynamicLocalization.WPF/) [DynamicLocalization.WPF](https://www.nuget.org/packages/DynamicLocalization.WPF/) | WPF platform implementation | WPF (.NET 6+) |
 
 ## Installation
 
@@ -199,6 +203,91 @@ public partial class App : Application
 }
 ```
 
+### 2b. Without Dependency Injection (Singleton Pattern)
+
+If you prefer not to use dependency injection, you can use the singleton pattern directly:
+
+#### Avalonia (App.axaml.cs)
+
+```csharp
+using DynamicLocalization.Avalonia;
+using DynamicLocalization.Core;
+using DynamicLocalization.Core.Providers;
+
+public partial class App : Application
+{
+    public override void Initialize()
+    {
+        // Create JSON provider
+        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        {
+            BasePath = "Localization",
+            UseEmbeddedResources = true,
+            Assembly = typeof(App).Assembly
+        });
+
+        // Or create RESX provider
+        // var resxProvider = new ResxLocalizationProvider(typeof(Resources.Strings));
+
+        // Initialize singleton service
+        var cultureService = new CultureService(jsonProvider);
+        LocalizationService.Initialize(cultureService);
+        
+        AvaloniaXamlLoader.Load(this);
+    }
+}
+```
+
+#### WPF (App.xaml.cs)
+
+```csharp
+using DynamicLocalization.WPF;
+using DynamicLocalization.Core;
+using DynamicLocalization.Core.Providers;
+
+public partial class App : Application
+{
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        // Create JSON provider
+        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        {
+            BasePath = "Localization",
+            UseEmbeddedResources = true,
+            Assembly = typeof(App).Assembly
+        });
+
+        // Or create RESX provider
+        // var resxProvider = new ResxLocalizationProvider(typeof(Properties.Resources));
+
+        // Initialize singleton service
+        var cultureService = new CultureService(jsonProvider);
+        LocalizationService.Initialize(cultureService);
+        
+        base.OnStartup(e);
+    }
+}
+```
+
+#### Accessing the Service
+
+```csharp
+// Get the singleton instance
+var cultureService = LocalizationService.CultureService;
+
+// Get localized string
+var greeting = cultureService["Greeting"];
+
+// Change culture
+cultureService.SetCulture("zh-CN");
+
+// Subscribe to culture changes
+cultureService.CultureChanged += (s, e) => 
+{
+    Console.WriteLine($"Culture changed from {e.OldCulture} to {e.NewCulture}");
+};
+```
+
 ### 3. Using in XAML
 
 #### Avalonia
@@ -231,6 +320,67 @@ public partial class App : Application
         <TextBlock Text="{loc:Localize Features.HotReload}"/>
     </StackPanel>
 </Window>
+```
+
+### LocalizeExtension Properties
+
+The `LocalizeExtension` supports the following optional properties:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `Key` | `string` | The localization key (required, constructor parameter) |
+| `StringFormat` | `string?` | Format string applied to the localized value |
+| `Converter` | `IValueConverter?` | Value converter for transforming the localized string |
+| `ConverterParameter` | `object?` | Parameter passed to the converter |
+
+#### Examples
+
+**With StringFormat:**
+```xml
+<TextBlock Text="{loc:Localize WelcomeMessage, StringFormat='Hello, {0}!'}"/>
+```
+
+**With Converter:**
+```xml
+<Window.Resources>
+    <local:FontSizeConverter x:Key="FontSizeConverter"/>
+</Window.Resources>
+
+<!-- Using converter to transform string to font size -->
+<TextBlock Text="{loc:Localize SampleText}" 
+           FontSize="{loc:Localize FontSize.Default, Converter={StaticResource FontSizeConverter}}"/>
+
+<!-- With converter parameter (multiplier) -->
+<TextBlock Text="{loc:Localize SampleText}" 
+           FontSize="{loc:Localize FontSize.Default, Converter={StaticResource FontSizeConverter}, ConverterParameter=1.5}"/>
+```
+
+**Culture-aware Font Size Example:**
+
+JSON resource files:
+```json
+// en.json
+{
+  "FontSize": {
+    "Default": "16",
+    "SampleText": "This text size changes with culture!"
+  }
+}
+
+// zh-CN.json
+{
+  "FontSize": {
+    "Default": "18",
+    "SampleText": "这段文字的大小会随文化变化！"
+  }
+}
+```
+
+XAML:
+```xml
+<!-- Default type conversion (string to double) -->
+<TextBlock Text="{loc:Localize FontSize.SampleText}" 
+           FontSize="{loc:Localize FontSize.Default}"/>
 ```
 
 ### 4. Using in ViewModel

@@ -32,5 +32,12 @@
     "PriceDisplay": "商品：{0}、価格：{1:C}",
     "DateDisplay": "今日は{0:D}です",
     "NumberDisplay": "値：{0:N2}"
+  },
+  "FontSize": {
+    "Title": "フォントサイズデモ：",
+    "Description": "カルチャに応じたフォントサイズの調整を示します。",
+    "DefaultSize": "14",
+    "LargeSize": "22",
+    "SampleText": "このテキストのサイズはカルチャによって変わります！"
   }
 }

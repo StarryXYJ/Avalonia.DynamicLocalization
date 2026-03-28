@@ -78,4 +78,19 @@
   <data name="Format.NumberDisplay" xml:space="preserve">
     <value>数值：{0:N2}</value>
   </data>
+  <data name="FontSize.Title" xml:space="preserve">
+    <value>字体大小演示：</value>
+  </data>
+  <data name="FontSize.Description" xml:space="preserve">
+    <value>演示根据文化调整字体大小。</value>
+  </data>
+  <data name="FontSize.DefaultSize" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="FontSize.LargeSize" xml:space="preserve">
+    <value>28</value>
+  </data>
+  <data name="FontSize.SampleText" xml:space="preserve">
+    <value>这段文字的大小会随文化变化！</value>
+  </data>
 </root>

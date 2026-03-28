@@ -78,4 +78,19 @@
   <data name="Format.NumberDisplay" xml:space="preserve">
     <value>値：{0:N2}</value>
   </data>
+  <data name="FontSize.Title" xml:space="preserve">
+    <value>フォントサイズデモ：</value>
+  </data>
+  <data name="FontSize.Description" xml:space="preserve">
+    <value>カルチャに応じたフォントサイズの調整を示します。</value>
+  </data>
+  <data name="FontSize.DefaultSize" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="FontSize.LargeSize" xml:space="preserve">
+    <value>22</value>
+  </data>
+  <data name="FontSize.SampleText" xml:space="preserve">
+    <value>このテキストのサイズはカルチャによって変わります！</value>
+  </data>
 </root>

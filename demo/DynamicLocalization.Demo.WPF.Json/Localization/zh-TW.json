@@ -32,5 +32,12 @@
     "PriceDisplay": "商品：{0}，價格：{1:C}",
     "DateDisplay": "今天是 {0:D}",
     "NumberDisplay": "數值：{0:N2}"
+  },
+  "FontSize": {
+    "Title": "字體大小演示：",
+    "Description": "演示根據文化調整字體大小。",
+    "DefaultSize": "18",
+    "LargeSize": "28",
+    "SampleText": "這段文字的大小會隨文化變化！"
   }
 }

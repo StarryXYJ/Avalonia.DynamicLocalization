@@ -78,4 +78,19 @@
   <data name="Format.NumberDisplay" xml:space="preserve">
     <value>Value: {0:N2}</value>
   </data>
+  <data name="FontSize.Title" xml:space="preserve">
+    <value>Font Size Demo:</value>
+  </data>
+  <data name="FontSize.Description" xml:space="preserve">
+    <value>Demonstrates culture-aware font sizing.</value>
+  </data>
+  <data name="FontSize.DefaultSize" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="FontSize.LargeSize" xml:space="preserve">
+    <value>24</value>
+  </data>
+  <data name="FontSize.SampleText" xml:space="preserve">
+    <value>This text size changes with culture!</value>
+  </data>
 </root>

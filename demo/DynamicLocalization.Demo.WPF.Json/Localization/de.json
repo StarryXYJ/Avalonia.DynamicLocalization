@@ -32,5 +32,12 @@
     "PriceDisplay": "Produkt: {0}, Preis: {1:C}",
     "DateDisplay": "Heute ist {0:D}",
     "NumberDisplay": "Wert: {0:N2}"
+  },
+  "FontSize": {
+    "Title": "Schriftgröße Demo:",
+    "Description": "Demonstriert kulturspezifische Schriftgrößenanpassung.",
+    "DefaultSize": "15",
+    "LargeSize": "23",
+    "SampleText": "Diese Textgröße ändert sich mit der Kultur!"
   }
 }

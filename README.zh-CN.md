@@ -1,5 +1,9 @@
 # DynamicLocalization
 
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.Core.svg)](https://www.nuget.org/packages/DynamicLocalization.Core/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/DynamicLocalization.Core.svg)](https://www.nuget.org/packages/DynamicLocalization.Core/)
+
 [English](README.md)
 
 一个轻量级、可扩展、可插拔的国际化库，支持热重载和多种数据源，适用于 Avalonia 和 WPF。
@@ -19,9 +23,9 @@
 
 | 包 | 描述 | 平台 |
 |---------|-------------|----------|
-| [DynamicLocalization.Core](src/DynamicLocalization.Core) | 核心库，包含平台无关逻辑 | .NET 6+ |
-| [DynamicLocalization.Avalonia](src/DynamicLocalization.Avalonia) | Avalonia 平台实现 | Avalonia 11+ |
-| [DynamicLocalization.WPF](src/DynamicLocalization.WPF) | WPF 平台实现 | WPF (.NET 6+) |
+| [![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.Core.svg)](https://www.nuget.org/packages/DynamicLocalization.Core/) [DynamicLocalization.Core](https://www.nuget.org/packages/DynamicLocalization.Core/) | 核心库，包含平台无关逻辑 | .NET 6+ |
+| [![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.Avalonia.svg)](https://www.nuget.org/packages/DynamicLocalization.Avalonia/) [DynamicLocalization.Avalonia](https://www.nuget.org/packages/DynamicLocalization.Avalonia/) | Avalonia 平台实现 | Avalonia 11+ |
+| [![NuGet](https://img.shields.io/nuget/v/DynamicLocalization.WPF.svg)](https://www.nuget.org/packages/DynamicLocalization.WPF/) [DynamicLocalization.WPF](https://www.nuget.org/packages/DynamicLocalization.WPF/) | WPF 平台实现 | WPF (.NET 6+) |
 
 ## 安装
 
@@ -197,6 +201,91 @@ public partial class App : Application
         base.OnStartup(e);
     }
 }
+```
+
+### 2b. 不使用依赖注入（单例模式）
+
+如果您不想使用依赖注入，可以直接使用单例模式：
+
+#### Avalonia (App.axaml.cs)
+
+```csharp
+using DynamicLocalization.Avalonia;
+using DynamicLocalization.Core;
+using DynamicLocalization.Core.Providers;
+
+public partial class App : Application
+{
+    public override void Initialize()
+    {
+        // 创建 JSON 提供者
+        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        {
+            BasePath = "Localization",
+            UseEmbeddedResources = true,
+            Assembly = typeof(App).Assembly
+        });
+
+        // 或创建 RESX 提供者
+        // var resxProvider = new ResxLocalizationProvider(typeof(Resources.Strings));
+
+        // 初始化单例服务
+        var cultureService = new CultureService(jsonProvider);
+        LocalizationService.Initialize(cultureService);
+        
+        AvaloniaXamlLoader.Load(this);
+    }
+}
+```
+
+#### WPF (App.xaml.cs)
+
+```csharp
+using DynamicLocalization.WPF;
+using DynamicLocalization.Core;
+using DynamicLocalization.Core.Providers;
+
+public partial class App : Application
+{
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        // 创建 JSON 提供者
+        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        {
+            BasePath = "Localization",
+            UseEmbeddedResources = true,
+            Assembly = typeof(App).Assembly
+        });
+
+        // 或创建 RESX 提供者
+        // var resxProvider = new ResxLocalizationProvider(typeof(Properties.Resources));
+
+        // 初始化单例服务
+        var cultureService = new CultureService(jsonProvider);
+        LocalizationService.Initialize(cultureService);
+        
+        base.OnStartup(e);
+    }
+}
+```
+
+#### 访问服务
+
+```csharp
+// 获取单例实例
+var cultureService = LocalizationService.CultureService;
+
+// 获取本地化字符串
+var greeting = cultureService["Greeting"];
+
+// 切换文化
+cultureService.SetCulture("zh-CN");
+
+// 订阅文化变更事件
+cultureService.CultureChanged += (s, e) => 
+{
+    Console.WriteLine($"文化已从 {e.OldCulture} 切换到 {e.NewCulture}");
+};
 ```
 
 ### 3. 在 XAML 中使用

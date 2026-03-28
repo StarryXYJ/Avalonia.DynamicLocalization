@@ -5,10 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DynamicLocalization.Demo.Wpf.Resx.ViewModels"
         xmlns:loc="clr-namespace:DynamicLocalization.WPF.MarkupExtensions;assembly=DynamicLocalization.WPF"
+        xmlns:conv="clr-namespace:DynamicLocalization.Demo.Wpf.Resx.Converters"
         mc:Ignorable="d"
         Title="{loc:Localize App.Title}"
         Height="600" Width="900"
         d:DataContext="{d:DesignInstance vm:MainWindowViewModel}">
+    <Window.Resources>
+        <conv:FontSizeConverter x:Key="FontSizeConverter"/>
+    </Window.Resources>
     <ScrollViewer>
         <StackPanel Margin="40">
             <TextBlock Style="{StaticResource H1Style}" Text="{Binding Greeting}"/>
@@ -71,6 +75,27 @@
                         <TextBlock Grid.Row="4" Grid.Column="0" Text="Format.NumberDisplay: " FontWeight="Bold" Margin="0,0,8,4"/>
                         <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding FormatNumberDisplay}" Style="{StaticResource MonoStyle}"/>
                     </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border BorderBrush="Crimson" BorderThickness="2" Padding="16" Margin="0,0,0,16" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="{loc:Localize FontSize.Title}" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Style="{StaticResource BodyStyle}" Text="{loc:Localize FontSize.Description}"/>
+                    
+                    <Separator Margin="0,8"/>
+                    
+                    <TextBlock Text="Default Type Conversion (string to double):" FontWeight="Bold" Margin="0,8,0,4"/>
+                    <TextBlock Text="{loc:Localize FontSize.SampleText}" 
+                               FontSize="{loc:Localize FontSize.DefaultSize}"/>
+                    
+                    <TextBlock Text="With FontSizeConverter (multiplier: 1.5):" FontWeight="Bold" Margin="0,12,0,4"/>
+                    <TextBlock Text="{loc:Localize FontSize.SampleText}" 
+                               FontSize="{loc:Localize FontSize.DefaultSize, Converter={StaticResource FontSizeConverter}, ConverterParameter=1.5}"/>
+                    
+                    <TextBlock Text="Using LargeSize directly:" FontWeight="Bold" Margin="0,12,0,4"/>
+                    <TextBlock Text="{loc:Localize FontSize.SampleText}" 
+                               FontSize="{loc:Localize FontSize.LargeSize}"/>
                 </StackPanel>
             </Border>
 

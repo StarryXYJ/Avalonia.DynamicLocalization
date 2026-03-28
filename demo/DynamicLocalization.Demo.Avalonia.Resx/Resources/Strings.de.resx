@@ -66,4 +66,19 @@
   <data name="Format.NumberDisplay" xml:space="preserve">
     <value>Wert: {0:N2}</value>
   </data>
+  <data name="FontSize.Title" xml:space="preserve">
+    <value>Schriftgröße Demo:</value>
+  </data>
+  <data name="FontSize.Description" xml:space="preserve">
+    <value>Demonstriert kulturspezifische Schriftgrößenanpassung.</value>
+  </data>
+  <data name="FontSize.DefaultSize" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="FontSize.LargeSize" xml:space="preserve">
+    <value>23</value>
+  </data>
+  <data name="FontSize.SampleText" xml:space="preserve">
+    <value>Diese Textgröße ändert sich mit der Kultur!</value>
+  </data>
 </root>
