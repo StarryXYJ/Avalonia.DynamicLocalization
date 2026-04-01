@@ -159,7 +159,7 @@ public partial class App : Application
         //     options.ResourceType = typeof(Resources.Strings);
         // });
 
-        services.AddLanguageService();
+        services.AddCultureService();
         Services = services.BuildServiceProvider().InitializeLocalization();
         AvaloniaXamlLoader.Load(this);
     }
@@ -195,7 +195,7 @@ public partial class App : Application
         //     options.ResourceType = typeof(Properties.Resources);
         // });
 
-        services.AddLanguageService();
+        services.AddCultureService();
         Services = services.BuildServiceProvider().InitializeLocalization();
         
         base.OnStartup(e);
@@ -218,19 +218,27 @@ public partial class App : Application
 {
     public override void Initialize()
     {
-        // 创建 JSON 提供者
-        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        // 创建并初始化 JSON 提供者
+        var jsonProvider = new JsonLocalizationProvider();
+        jsonProvider.Initialize(new JsonLocalizationProviderOptions
         {
             BasePath = "Localization",
             UseEmbeddedResources = true,
             Assembly = typeof(App).Assembly
         });
 
-        // 或创建 RESX 提供者
-        // var resxProvider = new ResxLocalizationProvider(typeof(Resources.Strings));
+        // 或创建并初始化 RESX 提供者
+        // var resxProvider = new ResxLocalizationProvider();
+        // resxProvider.Initialize(new ResxLocalizationProviderOptions
+        // {
+        //     ResourceType = typeof(Resources.Strings)
+        // });
 
-        // 初始化单例服务
-        var cultureService = new CultureService(jsonProvider);
+        // 创建文化服务并注册提供者
+        var cultureService = new CultureService();
+        cultureService.RegisterProvider(jsonProvider);
+        
+        // 初始化静态服务以供 XAML 标记扩展使用
         LocalizationService.Initialize(cultureService);
         
         AvaloniaXamlLoader.Load(this);
@@ -249,19 +257,27 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
-        // 创建 JSON 提供者
-        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        // 创建并初始化 JSON 提供者
+        var jsonProvider = new JsonLocalizationProvider();
+        jsonProvider.Initialize(new JsonLocalizationProviderOptions
         {
             BasePath = "Localization",
             UseEmbeddedResources = true,
             Assembly = typeof(App).Assembly
         });
 
-        // 或创建 RESX 提供者
-        // var resxProvider = new ResxLocalizationProvider(typeof(Properties.Resources));
+        // 或创建并初始化 RESX 提供者
+        // var resxProvider = new ResxLocalizationProvider();
+        // resxProvider.Initialize(new ResxLocalizationProviderOptions
+        // {
+        //     ResourceType = typeof(Properties.Resources)
+        // });
 
-        // 初始化单例服务
-        var cultureService = new CultureService(jsonProvider);
+        // 创建文化服务并注册提供者
+        var cultureService = new CultureService();
+        cultureService.RegisterProvider(jsonProvider);
+        
+        // 初始化静态服务以供 XAML 标记扩展使用
         LocalizationService.Initialize(cultureService);
         
         base.OnStartup(e);
@@ -284,7 +300,7 @@ cultureService.SetCulture("zh-CN");
 // 订阅文化变更事件
 cultureService.CultureChanged += (s, e) => 
 {
-    Console.WriteLine($"文化已从 {e.OldCulture} 切换到 {e.NewCulture}");
+    Console.WriteLine($"文化已从 {e.OldCulture.Name} 切换到 {e.NewCulture.Name}");
 };
 ```
 
@@ -330,24 +346,24 @@ using System.Globalization;
 
 public class MainViewModel
 {
-    private readonly ILanguageService _languageService;
+    private readonly ICultureService _cultureService;
 
-    public string Greeting => _languageService["Greeting"];
+    public string Greeting => _cultureService["Greeting"];
     
-    public IReadOnlyList<CultureInfo> AvailableLanguages => _languageService.AvailableLanguages;
+    public IReadOnlyList<CultureInfo> AvailableCultures => _cultureService.AvailableCultures;
 
-    public MainViewModel(ILanguageService languageService)
+    public MainViewModel(ICultureService cultureService)
     {
-        _languageService = languageService;
-        _languageService.LanguageChanged += OnLanguageChanged;
+        _cultureService = cultureService;
+        _cultureService.CultureChanged += OnCultureChanged;
     }
 
-    public void ChangeLanguage(CultureInfo culture)
+    public void ChangeCulture(CultureInfo culture)
     {
-        _languageService.CurrentLanguage = culture;
+        _cultureService.CurrentCulture = culture;
     }
 
-    private void OnLanguageChanged(object? sender, LanguageChangedEventArgs e)
+    private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
     {
         // 更新绑定属性
     }
@@ -386,19 +402,24 @@ JSON 提供者支持两种格式：
 
 ## API 参考
 
-### ILanguageService
+### ICultureService
 
-核心语言服务接口：
+核心文化服务接口：
 
 | 属性/方法 | 描述 |
 |-----------------|-------------|
-| `CurrentLanguage` | 获取或设置当前语言 |
-| `AvailableLanguages` | 获取所有可用语言列表 |
+| `CurrentCulture` | 获取或设置当前文化 |
+| `CurrentCultureName` | 获取当前文化名称（如 "en"、"zh-CN"） |
+| `AvailableCultures` | 获取所有可用文化列表 |
 | `this[string key]` | 获取指定键的本地化字符串 |
 | `GetString(string key)` | 获取本地化字符串 |
 | `GetString(string key, CultureInfo? culture)` | 获取指定区域性的本地化字符串 |
 | `Format(string key, params object[] args)` | 格式化本地化字符串 |
-| `LanguageChanged` | 语言更改事件 |
+| `SetCulture(string cultureName)` | 通过名称设置当前文化 |
+| `SetCulture(string cultureName, bool includeFormatting)` | 设置当前文化，可选择是否包含格式化文化 |
+| `RegisterProvider(ILocalizationProvider provider)` | 注册本地化提供者 |
+| `UnregisterProvider(string providerName)` | 通过名称注销本地化提供者 |
+| `CultureChanged` | 文化更改事件 |
 
 ### ILocalizationProvider
 
@@ -475,7 +496,7 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │                  DynamicLocalization.Core               │    │
-│  │  - ILanguageService, LanguageService                    │    │
+│  │  - ICultureService, CultureService                      │    │
 │  │  - ILocalizationProvider, Providers                     │    │
 │  │  - 平台无关逻辑                                          │    │
 │  └─────────────────────────────────────────────────────────┘    │

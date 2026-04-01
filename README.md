@@ -159,7 +159,7 @@ public partial class App : Application
         //     options.ResourceType = typeof(Resources.Strings);
         // });
 
-        services.AddLanguageService();
+        services.AddCultureService();
         Services = services.BuildServiceProvider().InitializeLocalization();
         AvaloniaXamlLoader.Load(this);
     }
@@ -195,7 +195,7 @@ public partial class App : Application
         //     options.ResourceType = typeof(Properties.Resources);
         // });
 
-        services.AddLanguageService();
+        services.AddCultureService();
         Services = services.BuildServiceProvider().InitializeLocalization();
         
         base.OnStartup(e);
@@ -218,19 +218,27 @@ public partial class App : Application
 {
     public override void Initialize()
     {
-        // Create JSON provider
-        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        // Create and initialize JSON provider
+        var jsonProvider = new JsonLocalizationProvider();
+        jsonProvider.Initialize(new JsonLocalizationProviderOptions
         {
             BasePath = "Localization",
             UseEmbeddedResources = true,
             Assembly = typeof(App).Assembly
         });
 
-        // Or create RESX provider
-        // var resxProvider = new ResxLocalizationProvider(typeof(Resources.Strings));
+        // Or create and initialize RESX provider
+        // var resxProvider = new ResxLocalizationProvider();
+        // resxProvider.Initialize(new ResxLocalizationProviderOptions
+        // {
+        //     ResourceType = typeof(Resources.Strings)
+        // });
 
-        // Initialize singleton service
-        var cultureService = new CultureService(jsonProvider);
+        // Create culture service and register provider
+        var cultureService = new CultureService();
+        cultureService.RegisterProvider(jsonProvider);
+        
+        // Initialize static service for XAML markup extensions
         LocalizationService.Initialize(cultureService);
         
         AvaloniaXamlLoader.Load(this);
@@ -249,19 +257,27 @@ public partial class App : Application
 {
     protected override void OnStartup(StartupEventArgs e)
     {
-        // Create JSON provider
-        var jsonProvider = new JsonLocalizationProvider(new JsonLocalizationOptions
+        // Create and initialize JSON provider
+        var jsonProvider = new JsonLocalizationProvider();
+        jsonProvider.Initialize(new JsonLocalizationProviderOptions
         {
             BasePath = "Localization",
             UseEmbeddedResources = true,
             Assembly = typeof(App).Assembly
         });
 
-        // Or create RESX provider
-        // var resxProvider = new ResxLocalizationProvider(typeof(Properties.Resources));
+        // Or create and initialize RESX provider
+        // var resxProvider = new ResxLocalizationProvider();
+        // resxProvider.Initialize(new ResxLocalizationProviderOptions
+        // {
+        //     ResourceType = typeof(Properties.Resources)
+        // });
 
-        // Initialize singleton service
-        var cultureService = new CultureService(jsonProvider);
+        // Create culture service and register provider
+        var cultureService = new CultureService();
+        cultureService.RegisterProvider(jsonProvider);
+        
+        // Initialize static service for XAML markup extensions
         LocalizationService.Initialize(cultureService);
         
         base.OnStartup(e);
@@ -284,7 +300,7 @@ cultureService.SetCulture("zh-CN");
 // Subscribe to culture changes
 cultureService.CultureChanged += (s, e) => 
 {
-    Console.WriteLine($"Culture changed from {e.OldCulture} to {e.NewCulture}");
+    Console.WriteLine($"Culture changed from {e.OldCulture.Name} to {e.NewCulture.Name}");
 };
 ```
 
@@ -391,24 +407,24 @@ using System.Globalization;
 
 public class MainViewModel
 {
-    private readonly ILanguageService _languageService;
+    private readonly ICultureService _cultureService;
 
-    public string Greeting => _languageService["Greeting"];
+    public string Greeting => _cultureService["Greeting"];
     
-    public IReadOnlyList<CultureInfo> AvailableLanguages => _languageService.AvailableLanguages;
+    public IReadOnlyList<CultureInfo> AvailableCultures => _cultureService.AvailableCultures;
 
-    public MainViewModel(ILanguageService languageService)
+    public MainViewModel(ICultureService cultureService)
     {
-        _languageService = languageService;
-        _languageService.LanguageChanged += OnLanguageChanged;
+        _cultureService = cultureService;
+        _cultureService.CultureChanged += OnCultureChanged;
     }
 
-    public void ChangeLanguage(CultureInfo culture)
+    public void ChangeCulture(CultureInfo culture)
     {
-        _languageService.CurrentLanguage = culture;
+        _cultureService.CurrentCulture = culture;
     }
 
-    private void OnLanguageChanged(object? sender, LanguageChangedEventArgs e)
+    private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
     {
         // Update bound properties
     }
@@ -447,19 +463,24 @@ The nested format is recommended for better organization and readability, especi
 
 ## API Reference
 
-### ILanguageService
+### ICultureService
 
-Core language service interface:
+Core culture service interface:
 
 | Property/Method | Description |
 |-----------------|-------------|
-| `CurrentLanguage` | Gets or sets the current language |
-| `AvailableLanguages` | Gets the list of all available languages |
+| `CurrentCulture` | Gets or sets the current culture |
+| `CurrentCultureName` | Gets the current culture name (e.g., "en", "zh-CN") |
+| `AvailableCultures` | Gets the list of all available cultures |
 | `this[string key]` | Gets the localized string for the specified key |
 | `GetString(string key)` | Gets a localized string |
 | `GetString(string key, CultureInfo? culture)` | Gets a localized string for the specified culture |
 | `Format(string key, params object[] args)` | Formats a localized string |
-| `LanguageChanged` | Language changed event |
+| `SetCulture(string cultureName)` | Sets the current culture by name |
+| `SetCulture(string cultureName, bool includeFormatting)` | Sets the current culture with optional formatting culture |
+| `RegisterProvider(ILocalizationProvider provider)` | Registers a localization provider |
+| `UnregisterProvider(string providerName)` | Unregisters a localization provider by name |
+| `CultureChanged` | Culture changed event |
 
 ### ILocalizationProvider
 
@@ -536,7 +557,7 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
 │                                                                 │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │                  DynamicLocalization.Core               │    │
-│  │  - ILanguageService, LanguageService                    │    │
+│  │  - ICultureService, CultureService                      │    │
 │  │  - ILocalizationProvider, Providers                     │    │
 │  │  - Platform-independent logic                           │    │
 │  └─────────────────────────────────────────────────────────┘    │
