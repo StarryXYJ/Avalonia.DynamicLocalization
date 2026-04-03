@@ -13,6 +13,7 @@
 - 🌍 **多语言支持** - 支持任意数量的语言
 - 🔄 **热重载** - 运行时动态切换语言，无需重启
 - 🔌 **可插拔架构** - 支持自定义数据源提供者
+- 🧩 **插件支持** - 动态注册/注销提供者，支持插件场景
 - 📦 **JSON 支持** - 内置 JSON 本地化文件支持（扁平格式和嵌套格式）
 - 📄 **RESX 支持** - 内置 RESX 资源文件支持
 - 🎯 **XAML 友好** - 提供简洁的 XAML 标记扩展
@@ -420,6 +421,7 @@ JSON 提供者支持两种格式：
 | `RegisterProvider(ILocalizationProvider provider)` | 注册本地化提供者 |
 | `UnregisterProvider(string providerName)` | 通过名称注销本地化提供者 |
 | `CultureChanged` | 文化更改事件 |
+| `ProvidersChanged` | 提供者注册/注销事件 |
 
 ### ILocalizationProvider
 
@@ -486,6 +488,151 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
     }
 }
 ```
+
+## 插件集成
+
+DynamicLocalization 支持动态注册/注销提供者，非常适合插件架构。
+
+### 插件本地化设置
+
+```csharp
+public class PluginLocalizationProvider : ILocalizationProvider
+{
+    private readonly Dictionary<string, Dictionary<string, string>> _cache = new();
+
+    public string Name => "MyPlugin";  // 使用唯一名称避免冲突
+
+    public PluginLocalizationProvider()
+    {
+        LoadFromEmbeddedResources();
+    }
+
+    private void LoadFromEmbeddedResources()
+    {
+        var assembly = typeof(PluginLocalizationProvider).Assembly;
+        var resourceNames = assembly.GetManifestResourceNames();
+
+        foreach (var name in resourceNames)
+        {
+            if (!name.Contains(".Localization.") || !name.EndsWith(".json"))
+                continue;
+
+            var cultureName = ExtractCultureName(name);
+            if (string.IsNullOrEmpty(cultureName)) continue;
+
+            using var stream = assembly.GetManifestResourceStream(name);
+            if (stream == null) continue;
+
+            using var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+            var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+            if (dict != null)
+            {
+                _cache[cultureName] = dict;
+            }
+        }
+    }
+
+    // ... 实现其他接口方法
+}
+```
+
+### 插件生命周期管理
+
+```csharp
+public class PluginEntryPoint
+{
+    private readonly ICultureService _cultureService;
+    private readonly PluginLocalizationProvider _provider;
+
+    public PluginEntryPoint(ICultureService cultureService)
+    {
+        _cultureService = cultureService;
+        _provider = new PluginLocalizationProvider();
+    }
+
+    public void Initialize()
+    {
+        _cultureService.RegisterProvider(_provider);
+        // UI 自动刷新，显示插件翻译
+    }
+
+    public void Unload()
+    {
+        _cultureService.UnregisterProvider(_provider.Name);
+        // UI 自动刷新，移除插件翻译
+    }
+}
+```
+
+### 键命名规范
+
+使用前缀避免与主程序或其他插件的键冲突：
+
+| 格式 | 示例 |
+|--------|---------|
+| `{插件名}.{功能}.{项}` | `MyPlugin.Menu.Open` |
+| `{插件名}.{项}` | `MyPlugin.Title` |
+
+## 扩展提供者
+
+`JsonLocalizationProvider` 和 `ResxLocalizationProvider` 都设计为可继承的。关键方法使用 `protected virtual` 修饰，便于自定义。
+
+### 扩展 JsonLocalizationProvider
+
+```csharp
+public class CustomJsonProvider : JsonLocalizationProvider
+{
+    public override string Name => "CustomJson";  // 自定义提供者名称
+
+    protected override string? ExtractCultureName(string resourceName)
+    {
+        // 自定义资源名称解析逻辑
+        return base.ExtractCultureName(resourceName);
+    }
+
+    protected override Dictionary<string, string>? ParseJsonToFlatDictionary(string json)
+    {
+        // 自定义 JSON 解析（如支持 YAML 或其他格式）
+        return base.ParseJsonToFlatDictionary(json);
+    }
+}
+```
+
+### 扩展 ResxLocalizationProvider
+
+```csharp
+public class CustomResxProvider : ResxLocalizationProvider
+{
+    public override string Name => "CustomResx";
+
+    protected override void DetectAvailableCultures()
+    {
+        // 自定义文化检测逻辑
+        base.DetectAvailableCultures();
+    }
+}
+```
+
+### 可重写成员
+
+**JsonLocalizationProvider:**
+| 成员 | 描述 |
+|--------|-------------|
+| `Name` | 提供者标识符 |
+| `LoadAll()` | 加载所有资源 |
+| `LoadFromEmbeddedResources()` | 从嵌入资源加载 |
+| `LoadFromFiles()` | 从文件系统加载 |
+| `ExtractCultureName()` | 从资源名提取文化 |
+| `ParseJsonToFlatDictionary()` | 解析 JSON 为字典 |
+| `FlattenJsonObject()` | 扁平化嵌套 JSON |
+| `TryGetFromCulture()` | 从指定文化获取字符串 |
+
+**ResxLocalizationProvider:**
+| 成员 | 描述 |
+|--------|-------------|
+| `Name` | 提供者标识符 |
+| `DetectAvailableCultures()` | 检测可用文化 |
 
 ## 架构
 

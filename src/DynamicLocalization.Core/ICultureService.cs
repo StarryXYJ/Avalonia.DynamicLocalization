@@ -150,4 +150,13 @@ public interface ICultureService : INotifyPropertyChanged
     /// Occurs when the current culture changes.
     /// </summary>
     event EventHandler<CultureChangedEventArgs>? CultureChanged;
+
+    /// <summary>
+    /// Occurs when a localization provider is registered or unregistered.
+    /// </summary>
+    /// <remarks>
+    /// This event is raised when providers are dynamically added or removed,
+    /// allowing UI elements to refresh their localized values.
+    /// </remarks>
+    event EventHandler? ProvidersChanged;
 }

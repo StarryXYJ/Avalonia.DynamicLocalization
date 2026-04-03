@@ -37,6 +37,7 @@ public class LocalizedString : INotifyPropertyChanged, IDisposable
         _args = args;
         _value = GetValue();
         _cultureService.CultureChanged += OnCultureChanged;
+        _cultureService.ProvidersChanged += OnProvidersChanged;
     }
 
     /// <summary>
@@ -76,6 +77,15 @@ public class LocalizedString : INotifyPropertyChanged, IDisposable
     }
 
     /// <summary>
+    /// Handles provider change events.
+    /// </summary>
+    private void OnProvidersChanged(object? sender, EventArgs e)
+    {
+        _value = GetValue();
+        OnPropertyChanged(nameof(Value));
+    }
+
+    /// <summary>
     /// Property changed event.
     /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -94,5 +104,6 @@ public class LocalizedString : INotifyPropertyChanged, IDisposable
     public void Dispose()
     {
         _cultureService.CultureChanged -= OnCultureChanged;
+        _cultureService.ProvidersChanged -= OnProvidersChanged;
     }
 }

@@ -18,6 +18,8 @@ public class CultureService : ICultureService, INotifyPropertyChanged
     
     public event EventHandler<CultureChangedEventArgs>? CultureChanged;
 
+    public event EventHandler? ProvidersChanged;
+
     public CultureInfo CurrentCulture
     {
         get => _currentCultureField;
@@ -105,12 +107,16 @@ public class CultureService : ICultureService, INotifyPropertyChanged
     {
         _providers.Add(provider);
         _availableCultures = null;
+        OnPropertyChanged(nameof(AvailableCultures));
+        OnProvidersChanged();
     }
 
     public void UnregisterProvider(string providerName)
     {
         _providers.RemoveAll(p => p.Name == providerName);
         _availableCultures = null;
+        OnPropertyChanged(nameof(AvailableCultures));
+        OnProvidersChanged();
     }
 
     public void SetCulture(string cultureName, bool includeFormatting = false)
@@ -129,6 +135,11 @@ public class CultureService : ICultureService, INotifyPropertyChanged
     protected virtual void OnCultureChanged(CultureInfo newCulture, CultureInfo oldCulture)
     {
         CultureChanged?.Invoke(this, new CultureChangedEventArgs(newCulture, oldCulture));
+    }
+
+    protected virtual void OnProvidersChanged()
+    {
+        ProvidersChanged?.Invoke(this, EventArgs.Empty);
     }
 
     protected virtual void OnPropertyChanged(string propertyName)

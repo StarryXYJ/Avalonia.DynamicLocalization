@@ -13,6 +13,7 @@ A lightweight, extensible, and pluggable internationalization library with hot-r
 - 🌍 **Multi-language Support** - Support for any number of languages
 - 🔄 **Hot Reload** - Dynamically switch languages at runtime without restart
 - 🔌 **Pluggable Architecture** - Support for custom data source providers
+- 🧩 **Plugin Support** - Dynamic provider registration/unregistration for plugin scenarios
 - 📦 **JSON Support** - Built-in JSON localization file support (flat and nested formats)
 - 📄 **RESX Support** - Built-in RESX resource file support
 - 🎯 **XAML Friendly** - Provides clean XAML markup extensions
@@ -481,6 +482,7 @@ Core culture service interface:
 | `RegisterProvider(ILocalizationProvider provider)` | Registers a localization provider |
 | `UnregisterProvider(string providerName)` | Unregisters a localization provider by name |
 | `CultureChanged` | Culture changed event |
+| `ProvidersChanged` | Provider registered/unregistered event |
 
 ### ILocalizationProvider
 
@@ -547,6 +549,151 @@ public class DatabaseLocalizationProvider : ILocalizationProvider
     }
 }
 ```
+
+## Plugin Integration
+
+DynamicLocalization supports dynamic provider registration/unregistration, making it ideal for plugin architectures.
+
+### Plugin Localization Setup
+
+```csharp
+public class PluginLocalizationProvider : ILocalizationProvider
+{
+    private readonly Dictionary<string, Dictionary<string, string>> _cache = new();
+
+    public string Name => "MyPlugin";  // Use a unique name to avoid conflicts
+
+    public PluginLocalizationProvider()
+    {
+        LoadFromEmbeddedResources();
+    }
+
+    private void LoadFromEmbeddedResources()
+    {
+        var assembly = typeof(PluginLocalizationProvider).Assembly;
+        var resourceNames = assembly.GetManifestResourceNames();
+
+        foreach (var name in resourceNames)
+        {
+            if (!name.Contains(".Localization.") || !name.EndsWith(".json"))
+                continue;
+
+            var cultureName = ExtractCultureName(name);
+            if (string.IsNullOrEmpty(cultureName)) continue;
+
+            using var stream = assembly.GetManifestResourceStream(name);
+            if (stream == null) continue;
+
+            using var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+            var dict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+            if (dict != null)
+            {
+                _cache[cultureName] = dict;
+            }
+        }
+    }
+
+    // ... implement other interface methods
+}
+```
+
+### Plugin Lifecycle Management
+
+```csharp
+public class PluginEntryPoint
+{
+    private readonly ICultureService _cultureService;
+    private readonly PluginLocalizationProvider _provider;
+
+    public PluginEntryPoint(ICultureService cultureService)
+    {
+        _cultureService = cultureService;
+        _provider = new PluginLocalizationProvider();
+    }
+
+    public void Initialize()
+    {
+        _cultureService.RegisterProvider(_provider);
+        // UI automatically refreshes to include plugin translations
+    }
+
+    public void Unload()
+    {
+        _cultureService.UnregisterProvider(_provider.Name);
+        // UI automatically refreshes to remove plugin translations
+    }
+}
+```
+
+### Key Naming Convention
+
+Use a prefix to avoid key conflicts with the main application or other plugins:
+
+| Format | Example |
+|--------|---------|
+| `{PluginName}.{Feature}.{Item}` | `MyPlugin.Menu.Open` |
+| `{PluginName}.{Item}` | `MyPlugin.Title` |
+
+## Extending Providers
+
+Both `JsonLocalizationProvider` and `ResxLocalizationProvider` are designed for inheritance. Key methods are `protected virtual` for easy customization.
+
+### Extending JsonLocalizationProvider
+
+```csharp
+public class CustomJsonProvider : JsonLocalizationProvider
+{
+    public override string Name => "CustomJson";  // Custom provider name
+
+    protected override string? ExtractCultureName(string resourceName)
+    {
+        // Custom resource name parsing logic
+        return base.ExtractCultureName(resourceName);
+    }
+
+    protected override Dictionary<string, string>? ParseJsonToFlatDictionary(string json)
+    {
+        // Custom JSON parsing (e.g., support YAML or other formats)
+        return base.ParseJsonToFlatDictionary(json);
+    }
+}
+```
+
+### Extending ResxLocalizationProvider
+
+```csharp
+public class CustomResxProvider : ResxLocalizationProvider
+{
+    public override string Name => "CustomResx";
+
+    protected override void DetectAvailableCultures()
+    {
+        // Custom culture detection logic
+        base.DetectAvailableCultures();
+    }
+}
+```
+
+### Overridable Members
+
+**JsonLocalizationProvider:**
+| Member | Description |
+|--------|-------------|
+| `Name` | Provider identifier |
+| `LoadAll()` | Load all resources |
+| `LoadFromEmbeddedResources()` | Load from embedded resources |
+| `LoadFromFiles()` | Load from file system |
+| `ExtractCultureName()` | Extract culture from resource name |
+| `ParseJsonToFlatDictionary()` | Parse JSON to dictionary |
+| `FlattenJsonObject()` | Flatten nested JSON |
+| `TryGetFromCulture()` | Get string from specific culture |
+
+**ResxLocalizationProvider:**
+| Member | Description |
+|--------|-------------|
+| `Name` | Provider identifier |
+| `DetectAvailableCultures()` | Detect available cultures |
 
 ## Architecture
 
